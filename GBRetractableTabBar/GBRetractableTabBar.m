@@ -614,11 +614,13 @@ _lazy(NSMutableArray, myViewControllers, _myViewControllers)
     VoidBlock heightAnimations = ^{
         self.contentView.frame = contentViewTargetFrame;
         self.barView.frame = barViewTargetFrame;
+        [self.contentView layoutIfNeeded];
     };
     
     VoidBlock overflowAnimations = ^{
         self.contentView.frame = contentViewFullHeightTargetFrame;
         self.barView.frame = barViewTargetOverflowFrame;
+        [self.contentView layoutIfNeeded];
     };
     
     CGFloat firstAnimationDuration = !shouldShowBar ? kGBRetractableBarAnimationDuration : kGBRetractableBarOverflowAnimationDuration;
@@ -630,8 +632,8 @@ _lazy(NSMutableArray, myViewControllers, _myViewControllers)
         NSTimeInterval fullAnimationDuration = firstAnimationDuration + secondAnimationDuration;
         NSTimeInterval firstAnimationRelativeDuration = firstAnimationDuration / fullAnimationDuration;
         NSTimeInterval secondAnimationRelativeDuration = secondAnimationDuration / fullAnimationDuration;
-
-        [UIView animateKeyframesWithDuration:fullAnimationDuration delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [UIView animateKeyframesWithDuration:fullAnimationDuration delay:0.0 options:UIViewKeyframeAnimationOptionCalculationModeCubic animations:^{
             //first animation keyframe
             [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:firstAnimationRelativeDuration animations:^{
                 firstAnimations();
